@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './charactertype.css'
-import img from './obi-wan-kenobi.png'
+import imgobi from './obi-wan-kenobi.png'
+import imgsky from './skywalker.png'
 
-const characterType = ({ data, type, error }) => {
+
+const CharacterType = ({ data, type, error }) => {
+    // Propiedades de diferentes tipos de personajes en Star Wars
     const propByType = {
         people: ["name", "height", "mass", "hair_color"],
         planets: ["name", "diameter", "climate", "terrain"],
@@ -10,28 +13,45 @@ const characterType = ({ data, type, error }) => {
         starships: ["name", "model", "manufacturer", "crew"],
         vehicles: ["name", "model", "manufacturer", "crew"],
         films: ["title", "director", "producer", "opening_crawl"]
-    }
-    
-    const propToShow = propByType[type];
+    };
+
+    // Estado para controlar el estado de carga
+    const [loading, setLoading] = useState(true);
+
+    // Efecto para actualizar el estado de carga cuando los datos se cargan
+    useEffect(() => {
+        if (data && Object.keys(data).length > 0) {
+            setLoading(false);
+        }
+    }, [data]);
 
     return (
         <div className='rpta-cont'>
-            {error ? ( // Verificar si hay un error
+            {error ? (
                 <div>
                     <h1>Estos no son los droides que está buscando</h1>
-                    <img src={img} alt="obi" />
+                    <img src={imgobi} alt="obi" />
                 </div>
             ) : (
-                propToShow && data ? ( // Verificar si existen datos y propiedades para mostrar
-                    propToShow.map((prop, i) => (
-                        <p key={i}> <b>{prop.replace("_", " ").toUpperCase()}:</b> {data[prop]} </p>
-                    ))
+                loading ? (
+                    <div>Cargando...</div>
                 ) : (
-                    <div>No hay datos disponibles</div>
+                    // Renderizar las propiedades del personaje
+                    propByType[type] && data ? (
+                        propByType[type].map((prop, i) => (
+                            <p key={i}> <b>{prop.replace("_", " ").toUpperCase()}:</b> {data[prop]} </p>
+                        ))
+                    ) : (
+                        // Mostrar un mensaje si no hay datos disponibles
+                        <div>
+                            <h1>No hay datos disponibles</h1>
+                            <img src={imgsky} alt="obi" />
+                        </div>
+                    )
                 )
             )}
         </div>
-    )
-}
+    );
+};
 
-export default characterType;
+export default CharacterType;

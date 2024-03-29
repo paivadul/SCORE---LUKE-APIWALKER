@@ -34,7 +34,7 @@ const Home = () => {
     return (
         <div className='general'>
             <div className='container'>
-                <h1>Personajes</h1>
+                <h1>Star Wars</h1>
                 <div className='cont-1'>
                     <label>Search for</label>
                     <select onChange={(e) => changeType(e)}>
