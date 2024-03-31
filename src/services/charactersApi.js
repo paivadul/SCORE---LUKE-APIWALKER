@@ -1,10 +1,10 @@
-import Axios from "axios";
+import axios from 'axios';
 
 
 // const selectType= ["people", "planets", "species", "starships", "vehicles", "films"]
 
 export const getSelectTypeWapi = async (selectType, id) => {
-    const respuesta = await Axios.get(`https://www.swapi.tech/api/${selectType}/${id}`);
+    const respuesta = await axios.get(`https://www.swapi.tech/api/${selectType}/${id}`);
     console.log('people: ', respuesta)
     return respuesta
 }

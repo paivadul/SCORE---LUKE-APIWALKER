@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import '../App.css';
 import { getSelectTypeWapi } from '../services/charactersApi';
 import CharacterType from '../components/characterType';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const wapiType = ["people", "planets", "species", "starships", "vehicles", "films"]
     const [id, setId] = useState(''); // ID cargado
     const [selectType, setSelectType] = useState(''); // Tipo cargado
     const [dataType, setDataType] = useState(null); // Estado de los datos obtenidos
-    const [error, setError] = useState(false); // Estado para controlar errores
     const [renderRptaWapi, setRenderRptaWapi] = useState(false); // Estado para controlar el renderizado de characterType
 
     const handleWapiType = async () => { // Manejar el clic en el botón para renderizar characterType
@@ -16,10 +16,8 @@ const Home = () => {
         try {
                 const respuesta = await getSelectTypeWapi(selectType, id); // Obtener los datos
                 setDataType(respuesta.data.result.properties); // Establecer los datos obtenidos
-                setError(false); // Reiniciar el estado de error
             } catch (error) {
                 console.log('Estos no son los droides que está buscando', error);
-                setError(true); // Establecer el estado de error
             }
     }
 
@@ -39,9 +37,11 @@ const Home = () => {
                     <label>Search for</label>
                     <select onChange={(e) => changeType(e)}>
                         <option value="">Select Type</option>
-                        {wapiType.map((elem, i) => (
+                        {
+                        wapiType.map((elem, i) => (
                             <option value={elem} key={i}>{elem}</option>
-                        ))}
+                        ))
+                        }
                     </select>
                 </div>
                 <div className='cont-2'>
@@ -49,8 +49,9 @@ const Home = () => {
                     <input name="id" type='number' onChange={(e) => changeId(e) }/>
                     <button onClick={handleWapiType}>Search</button>
                 </div>
+                <button>  <Link to={"/"}>Cerrar sesión </Link> </button>
             </div>
-            {renderRptaWapi && <CharacterType data={dataType} type={selectType} error={error} />} {/* Renderizar characterType si renderRptaWapi es verdadero */}
+            {renderRptaWapi && <CharacterType data={dataType} type={selectType}/>} {/* Renderizar characterType si renderRptaWapi es verdadero */}
         </div>
     );
 };
